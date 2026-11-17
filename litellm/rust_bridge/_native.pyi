@@ -1838,6 +1838,32 @@ class RustModelAccessGroupStore:
     def budgets(self, names: Sequence[str]) -> Future[list[tuple[str, float, float | None, bool]]]: ...
 
 @final
+class RustBudgetStore:
+    def __new__(cls, database: NativeDatabase) -> RustBudgetStore: ...
+    def find_budget(self, budget_id: str) -> Future[str | None]: ...
+    def find_team_member_default_budget(self, budget_id: str) -> Future[str | None]: ...
+
+@final
+class RustEndUserStore:
+    def __new__(cls, database: NativeDatabase) -> RustEndUserStore: ...
+    def find_end_user(self, end_user_id: str) -> Future[str | None]: ...
+    def restricted_end_user_ids(self, limit: int) -> Future[list[str]]: ...
+
+class _RustSignIn(TypedDict):
+    user_id: str
+    sso_user_id: str | None
+    user_email: str | None
+    email_verified: bool | None
+    links_any_user: bool
+
+@final
+class RustUserStore:
+    def __new__(cls, database: NativeDatabase) -> RustUserStore: ...
+    def resolve_user(self, sign_in: _RustSignIn, writer: bool) -> Future[str | None]: ...
+    def email_belongs_to_another_user(self, user_email: str, user_id: str) -> Future[bool]: ...
+    def backfill_user_email(self, user_id: str, user_email: str, *, links_any_user: bool) -> Future[str | None]: ...
+
+@final
 class NativeTokenRedactor:
     def __new__(cls, minimum_custom_key_length: int, word_ranges: Sequence[tuple[int, int]]) -> NativeTokenRedactor: ...
     def redact(self, text: str, replacement: str) -> str | None: ...
@@ -2075,8 +2101,10 @@ __all__ = [
     "RustAuthSettings",
     "RustAuthStep",
     "RustBridgeDeclined",
+    "RustBudgetStore",
     "RustClaimIdentity",
     "RustDenial",
+    "RustEndUserStore",
     "RustIdentity",
     "RustJwtKeyMappingStore",
     "RustJwtMapping",
@@ -2087,6 +2115,7 @@ __all__ = [
     "RustPlan",
     "RustTeamGrant",
     "RustUpstreamError",
+    "RustUserStore",
     "SpendRead",
     "TokenCounter",
     "Tokenizer",

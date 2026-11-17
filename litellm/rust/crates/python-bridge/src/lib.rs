@@ -49,7 +49,10 @@ mod _native {
     #[pymodule_export]
     use crate::db::{NativeDatabase, NativeDatabaseFailure};
     #[pymodule_export]
-    use crate::db_store::{RustJwtKeyMappingStore, RustKeyStore, RustModelAccessGroupStore};
+    use crate::db_store::{
+        RustBudgetStore, RustEndUserStore, RustJwtKeyMappingStore, RustKeyStore,
+        RustModelAccessGroupStore, RustUserStore,
+    };
     #[cfg(feature = "panic-test")]
     #[pymodule_export]
     use crate::diagnostics::_panic_for_test;
@@ -214,6 +217,9 @@ mod tests {
                 "RustKeyStore",
                 "RustJwtKeyMappingStore",
                 "RustModelAccessGroupStore",
+                "RustBudgetStore",
+                "RustEndUserStore",
+                "RustUserStore",
                 "trace_encode_error",
                 "bundled_model_cost_map",
                 "NativeModelCostMap",

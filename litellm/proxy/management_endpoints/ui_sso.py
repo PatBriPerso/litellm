@@ -2018,7 +2018,7 @@ async def _sso_email_taken(
     if user_email is None or owner_id is None or (stored_email or "").casefold() == user_email.casefold():
         return False
     try:
-        return await email_belongs_to_another_user(prisma_client, user_email, owner_id)
+        return await email_belongs_to_another_user(user_email, owner_id)
     except Exception as error:  # noqa: BLE001  # the email is optional, so a failed check leaves it out
         verbose_proxy_logger.warning("SSO sign-in: could not check whether the email is in use: %s", error)
         return True
